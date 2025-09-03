@@ -74,7 +74,6 @@
                 <nav class="flex items-center space-x-2 sm:space-x-4">
                     <a href="#" id="home-link" class="px-2 py-1 rounded-full text-gray-600 font-medium hover:bg-gray-200 hover:text-gray-900 transition-colors duration-300 text-sm sm:text-base">Home</a>
                     <a href="#" id="blog-link" class="px-2 py-1 rounded-full text-gray-600 font-medium hover:bg-gray-200 hover:text-gray-900 transition-colors duration-300 text-sm sm:text-base">Blog</a>
-                    <a href="#" id="write-rant-link" class="px-2 py-1 rounded-full text-gray-600 font-medium hover:bg-gray-200 hover:text-gray-900 transition-colors duration-300 text-sm sm:text-base">✨ Write a Rant</a>
                 </nav>
             </div>
         </header>
@@ -90,7 +89,6 @@
         const mainContent = document.getElementById('main-content');
         const homeLink = document.getElementById('home-link');
         const blogLink = document.getElementById('blog-link');
-        const writeRantLink = document.getElementById('write-rant-link');
         const searchInput = document.getElementById('search-input');
         const searchButton = document.getElementById('search-button');
 
@@ -589,7 +587,7 @@
 
         /**
          * Renders the content for the specified page.
-         * @param {string} pageName - The name of the page to render ('home', 'blog', 'write-rant', 'search').
+         * @param {string} pageName - The name of the page to render ('home', 'blog', 'search').
          * @param {string} [query] - The search query string (optional).
          */
         function renderPage(pageName, query = '') {
@@ -649,28 +647,6 @@
                                 <button onclick="renderPage('home')" class="bg-gray-800 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-900 transition-colors duration-300 transform hover:scale-105">
                                     &larr; Back to Latest Rants
                                 </button>
-                            </div>
-                        </div>
-                    `;
-                    break;
-                case 'write-rant':
-                    // New page for writing a rant using the Gemini API
-                    content = `
-                        <div class="bg-white p-8 rounded-xl shadow-lg max-w-3xl mx-auto">
-                            <h1 class="text-4xl font-bold mb-6 text-gray-900 text-center">✨ Write a New Rant</h1>
-                            <div class="space-y-4">
-                                <div>
-                                    <label for="rant-topic" class="block text-gray-600 font-medium mb-1">Topic</label>
-                                    <input type="text" id="rant-topic" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 transition duration-200 bg-white text-gray-900" placeholder="e.g., The problem with dongles">
-                                </div>
-                                <button id="generate-rant-btn" class="w-full bg-gray-800 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-900 transition-colors duration-300 transform hover:scale-105 flex items-center justify-center">
-                                    <span id="generate-rant-text">Generate Rant</span>
-                                    <span id="generate-rant-spinner" class="spinner hidden"></span>
-                                </button>
-                            </div>
-                            <div id="generated-rant-output" class="mt-8 p-6 bg-gray-100 rounded-lg border border-gray-200 hidden">
-                                <h2 id="generated-rant-title" class="text-2xl font-semibold mb-2 text-gray-900"></h2>
-                                <p id="generated-rant-content" class="text-gray-800 leading-relaxed whitespace-pre-line"></p>
                             </div>
                         </div>
                     `;
@@ -739,11 +715,6 @@
                     renderPost(postId);
                 });
             });
-
-            // If on the 'write-rant' page, attach the new event listener
-            if (pageName === 'write-rant') {
-                document.getElementById('generate-rant-btn').addEventListener('click', generateRant);
-            }
         }
 
         // A new function to render a specific blog post
@@ -970,70 +941,6 @@
             }
         }
         
-        /**
-         * Generates a new rant based on a user's topic using the Gemini API.
-         */
-        async function generateRant() {
-            const rantTopicInput = document.getElementById('rant-topic');
-            const generateRantBtn = document.getElementById('generate-rant-btn');
-            const generateRantText = document.getElementById('generate-rant-text');
-            const generateRantSpinner = document.getElementById('generate-rant-spinner');
-            const generatedRantOutput = document.getElementById('generated-rant-output');
-            const generatedRantTitle = document.getElementById('generated-rant-title');
-            const generatedRantContent = document.getElementById('generated-rant-content');
-
-            const topic = rantTopicInput.value;
-            if (!topic) {
-                generatedRantOutput.classList.remove('hidden');
-                generatedRantTitle.textContent = "Please enter a topic.";
-                generatedRantContent.textContent = "";
-                return;
-            }
-
-            // Show loading state
-            generateRantBtn.disabled = true;
-            generateRantText.classList.add('hidden');
-            generateRantSpinner.classList.remove('hidden');
-            generatedRantOutput.classList.add('hidden');
-
-            try {
-                const prompt = `Write a tech rant about the following topic in the style of a blog post with a title. The tone should be slightly annoyed and informal. The content should be at least two paragraphs. Topic: ${topic}`;
-                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
-                const apiKey = "";
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const result = await response.json();
-                
-                const generatedText = result.candidates[0].content.parts[0].text;
-                const lines = generatedText.split('\n');
-                const title = lines[0].replace(/^(Title|title):?\s*/, '').trim();
-                const content = lines.slice(1).join('\n').trim();
-
-                generatedRantTitle.textContent = title || 'Untitled Rant';
-                generatedRantContent.textContent = content;
-                generatedRantOutput.classList.remove('hidden');
-
-            } catch (error) {
-                console.error("Rant generation failed:", error);
-                generatedRantTitle.textContent = "Failed to generate rant. Please try again.";
-                generatedRantContent.textContent = "";
-                generatedRantOutput.classList.remove('hidden');
-            } finally {
-                // Hide loading state
-                generateRantBtn.disabled = false;
-                generateRantText.classList.remove('hidden');
-                generateRantSpinner.classList.add('hidden');
-            }
-        }
-        
         // Add event listeners to each navigation link
         homeLink.addEventListener('click', (e) => {
             e.preventDefault();
@@ -1043,11 +950,6 @@
         blogLink.addEventListener('click', (e) => {
             e.preventDefault();
             renderPage('blog');
-        });
-
-        writeRantLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            renderPage('write-rant');
         });
 
         // Add event listener for the search button
