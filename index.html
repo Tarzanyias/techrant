@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechRant</title>
+    <!-- Use Tailwind CSS for rapid styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use Inter font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light background */
+            color: #1f2937; /* Dark text */
+        }
+        /* Custom styles for loading spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Main container for the entire layout -->
+    <div class="flex flex-col min-h-screen">
+        <!-- Header with a simple navigation menu and search bar -->
+        <header class="bg-white shadow-md py-4">
+            <!-- Use flex-wrap to ensure elements wrap onto a new line on smaller screens -->
+            <div class="container mx-auto px-4 flex flex-wrap justify-between items-center space-y-4 sm:space-y-0">
+                <!-- Left side container for Title and Search Bar, now responsive -->
+                <div class="flex items-center space-x-4 w-full sm:w-auto flex-wrap sm:flex-nowrap">
+                    <!-- Website Title with Image -->
+                    <a href="#" id="home-nav" class="flex items-center text-xl sm:text-2xl font-bold text-gray-800 hover:text-gray-600 transition-colors duration-300">
+                        <!-- Website Icon, size adjusted for responsiveness -->
+                        <div class="w-8 h-8 flex items-center justify-center mr-2 rounded-full">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="16" cy="16" r="14" stroke="#4B5563" stroke-width="2"/>
+                                <circle cx="16" cy="16" r="10" stroke="#4B5563" stroke-width="2"/>
+                                <circle cx="16" cy="16" r="6" fill="#4B5563"/>
+                            </svg>
+                        </div>
+                        TechRant
+                    </a>
+                    <!-- Search Bar with Icon - now takes full width on small screens -->
+                    <div class="flex items-center space-x-2 w-full sm:w-auto">
+                        <input type="text" id="search-input" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 transition duration-200 bg-white text-gray-900" placeholder="Search...">
+                        <!-- Search button with a new SVG icon -->
+                        <button id="search-button" aria-label="Search" class="p-2 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors duration-200">
+                             <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              width="24" height="24"
+                              fill="none"
+                              stroke="currentColor" stroke-width="2"
+                              stroke-linecap="round" stroke-linejoin="round"
+                              aria-hidden="true"
+                            >
+                              <circle cx="11" cy="11" r="7"></circle>
+                              <line x1="16.65" y1="16.65" x2="21" y2="21"></line>
+                        </svg>
+                        </button>
+                    </div>
+                </div>
+                <!-- Navigation Links - now centered on small screens, right-aligned on larger screens -->
+                <nav class="flex items-center space-x-2 sm:space-x-4">
+                    <a href="#" id="home-link" class="px-2 py-1 rounded-full text-gray-600 font-medium hover:bg-gray-200 hover:text-gray-900 transition-colors duration-300 text-sm sm:text-base">Home</a>
+                    <a href="#" id="blog-link" class="px-2 py-1 rounded-full text-gray-600 font-medium hover:bg-gray-200 hover:text-gray-900 transition-colors duration-300 text-sm sm:text-base">Blog</a>
+                    <a href="#" id="write-rant-link" class="px-2 py-1 rounded-full text-gray-600 font-medium hover:bg-gray-200 hover:text-gray-900 transition-colors duration-300 text-sm sm:text-base">✨ Write a Rant</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main content area where pages are rendered -->
+        <main id="main-content" class="container mx-auto px-4 py-8 flex-grow">
+            <!-- Content will be injected here by JavaScript -->
+        </main>
+    </div>
+
+    <script>
+        // Get references to the navigation links, search elements, and the main content area
+        const mainContent = document.getElementById('main-content');
+        const homeLink = document.getElementById('home-link');
+        const blogLink = document.getElementById('blog-link');
+        const writeRantLink = document.getElementById('write-rant-link');
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+
+        // Sample blog posts data
+        const posts = [
+            {
+                id: 'post-1',
+                title: 'Meta\'s Latest AI Assistant: A Step Toward True Conversation',
+                date: 'October 26, 2025',
+                summary: `Meta announces a significant update to its AI assistant, featuring a new large language model that can maintain context across multiple turns and even understand nuanced social cues, bringing it closer to natural human conversation.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Meta+AI',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">Meta\'s Latest AI Assistant: A Step Toward True Conversation</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 26, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            In a presentation that has captivated the tech world, Meta has unveiled its most advanced AI assistant to date. The new assistant, integrated across its family of apps, is powered by a groundbreaking new large language model. This model goes beyond simple question-and-answer functionality, boasting the ability to remember previous conversations and infer user intent.
+                        </p>
+                        <p class="leading-relaxed mb-4">
+                            The most impressive feature is its ability to understand **contextual continuity**. During a live demo, the assistant seamlessly transitioned from a conversation about travel plans to suggesting restaurants in the destination city without any explicit prompts, demonstrating a new level of conversational intelligence. While consumer availability is still being rolled out, the demo has set a new benchmark for what\'s possible in AI interaction.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-2',
+                title: 'New "Quantum" Chip from Intel Doubles Processing Speed',
+                date: 'October 25, 2025',
+                summary: `Intel reveals a new "Quantum" series of desktop processors that leverage hybrid architecture to significantly boost performance. The new chips are not truly quantum but use novel methods to double processing speed and efficiency for consumer applications.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Intel+Quantum',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">New "Quantum" Chip from Intel Doubles Processing Speed</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 25, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            Intel has announced a major leap in its desktop CPU lineup with the new "Quantum" series. The chips utilize a revolutionary hybrid core architecture, combining performance cores with highly efficient, low-power cores. This allows the processor to dynamically switch workloads between different cores for maximum efficiency.
+                        </p>
+                        <p class="leading-relaxed mb-4">
+                            Initial benchmarks show a near **doubling of performance** in applications like video editing and 3D rendering compared to previous generations. The name "Quantum" is a marketing term and doesn\'t relate to true quantum computing, but the performance gains are real and set a new standard for the consumer market.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-3',
+                title: 'Samsung Unveils a Foldable Tablet and Smartphone Hybrid',
+                date: 'October 24, 2025',
+                summary: `Samsung introduces a new device, the "Galaxy Flex," which blurs the line between a tablet and a phone. The device features a revolutionary triple-fold design, allowing it to expand from a pocket-sized phone to a full-sized 10-inch tablet.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Samsung+Fold',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">Samsung Unveils a Foldable Tablet and Smartphone Hybrid</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 24, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            At its annual product showcase, Samsung stunned the audience with the Galaxy Flex, a device that redefines the concept of a foldable screen. The device\'s innovative three-panel folding mechanism allows it to be used as a standard smartphone, a larger phablet, or a full-fledged 10-inch tablet.
+                        </p>
+                        <p class="leading-relaxed mb-4">
+                            The new hinge technology is remarkably durable and virtually seamless. Early reviews praise the device\'s versatility and seamless software integration. The Galaxy Flex is seen as a new direction for the market, offering users the functionality of multiple devices in one single, elegant package.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-4',
+                title: 'Google\'s Project Aura: A New Operating System for Smart Homes',
+                date: 'October 23, 2025',
+                summary: `Google introduces Project Aura, a new lightweight operating system designed to unify all smart home devices under a single, user-friendly platform. It promises seamless integration and improved security.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Google+Home',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">Google\'s Project Aura: A New Operating System for Smart Homes</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 23, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            Project Aura is Google\'s bold new venture into the smart home ecosystem. The open-source operating system is designed to provide a unified experience, allowing devices from different manufacturers to communicate and interact effortlessly. With security as a core focus, Aura uses a new encryption protocol that makes it a more secure alternative to existing platforms.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-5',
+                title: 'OpenAI\'s New GPT Model Generates Realistic Video',
+                date: 'October 22, 2025',
+                summary: `OpenAI announces its new GPT-V model, a multimodal AI capable of generating realistic, short-form video clips from a simple text prompt. The technology is still in its early stages but holds immense potential.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=OpenAI+Video',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">OpenAI\'s New GPT Model Generates Realistic Video</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 22, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            Following its success in generating text and images, OpenAI has ventured into the world of video with its new **GPT-V model**. The model can create short, high-fidelity video clips from a detailed text description. While the videos are currently limited to a few seconds, the realism and fluidity are impressive, marking a significant step forward in generative AI.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-6',
+                title: 'Tesla\'s New Battery Breakthrough Doubles Electric Car Range',
+                date: 'October 21, 2025',
+                summary: `Tesla announces a new solid-state battery technology that could double the range of its electric vehicles. The new battery also reduces charging time by 50%, a game-changer for the EV industry.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Tesla+Battery',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">Tesla\'s New Battery Breakthrough Doubles Electric Car Range</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 21, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            Tesla has long been a leader in the electric vehicle market, and its latest announcement could solidify that position. The company has developed a new solid-state battery that promises to significantly improve the performance and range of its vehicles. The new battery not only offers a longer range but also a much faster charging speed, addressing one of the biggest pain points for EV owners.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-7',
+                title: 'Microsoft Launches "Hololens 3" with Wider Field of View',
+                date: 'October 20, 2025',
+                summary: `Microsoft introduces the third generation of its mixed-reality headset, the "Hololens 3." The new device addresses a major limitation of its predecessors with a significantly wider field of view and a more ergonomic design.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Hololens+3',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">Microsoft Launches "Hololens 3" with Wider Field of View</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 20, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            Microsoft has revealed the highly anticipated Hololens 3, a new leap forward in mixed reality. The new version boasts a significantly wider field of view, making the augmented reality experience feel much more natural. It also features a lighter, more comfortable design and improved processing power, making it a more practical tool for enterprise and creative professionals.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-8',
+                title: 'Apple\'s "iCar" Project Rumors Intensify',
+                date: 'October 19, 2025',
+                summary: `New reports suggest Apple is accelerating its "iCar" project. The self-driving electric vehicle is rumored to feature a revolutionary, fully integrated software platform and a minimalist, futuristic design.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Apple+Car',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">Apple\'s "iCar" Project Rumors Intensify</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 19, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            After years of speculation, the "iCar" project seems to be gaining momentum. Leaked schematics and supply chain rumors point to a fully autonomous, electric vehicle with a deeply integrated software ecosystem. The car is said to have no traditional dashboard, with all controls managed by a central screen and voice commands.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-9',
+                title: 'Amazon\'s New Delivery Drone Fleet Gets Regulatory Approval',
+                date: 'October 18, 2025',
+                summary: `Amazon receives federal approval for its new fleet of delivery drones. The drones can carry packages up to 10 pounds and operate in all weather conditions, promising to make last-mile delivery faster and more efficient.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Amazon+Drone',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">Amazon\'s New Delivery Drone Fleet Gets Regulatory Approval</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 18, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            Amazon\'s vision of a drone-powered delivery network is one step closer to reality. The company has secured key regulatory approval to begin operating its new drone fleet in select cities. The drones are designed to handle a wide range of packages and are equipped with advanced sensors for safe navigation in urban environments.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-10',
+                title: 'Sony\'s New 8K OLED TV: A Feast for the Eyes',
+                date: 'October 17, 2025',
+                summary: `Sony unveils its latest flagship TV, an 8K OLED model with a new processor that uses AI to upscale content. The television promises an unparalleled viewing experience with vibrant colors and deep blacks.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Sony+TV',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">Sony\'s New 8K OLED TV: A Feast for the Eyes</h2>
+                        <p class="text-600 mb-6">Published on <span class="font-bold">October 17, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            Sony has once again raised the bar for home entertainment with its new 8K OLED television. The TV features a new "Cognitive Processor XR" that analyzes every scene to enhance picture quality in real-time. It can also upscale lower-resolution content to 8K, making everything from old movies to new blockbusters look stunning.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-11',
+                title: 'SpaceX\'s Starship Successfully Completes Lunar Mission',
+                date: 'October 16, 2025',
+                summary: `SpaceX\'s Starship prototype successfully lands on the moon and returns to Earth, marking a major milestone in human space exploration. The mission was a test run for future manned missions to Mars.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=SpaceX+Moon',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">SpaceX\'s Starship Successfully Completes Lunar Mission</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 16, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            In a historic first, SpaceX\'s reusable Starship rocket successfully completed a round trip to the moon. The uncrewed mission was designed to test the vehicle\'s landing and re-entry capabilities, which will be crucial for future deep-space missions. The successful landing is a major step toward establishing a human presence on the moon and eventually, Mars.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-12',
+                title: 'Neuralink\'s Brain Chip Receives FDA Approval for Human Trials',
+                date: 'October 15, 2025',
+                summary: `Neuralink, Elon Musk\'s brain-computer interface company, receives FDA approval to begin human trials. The initial trials will focus on helping paralyzed individuals regain control of digital devices.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Neuralink+Human',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">Neuralink\'s Brain Chip Receives FDA Approval for Human Trials</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 15, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            Neuralink has been granted a historic FDA approval to begin clinical trials on humans. The company\'s tiny, implantable brain chip is designed to allow individuals to control computers and smartphones with their thoughts. The first set of trials will focus on patients with severe paralysis, offering them new hope for independence and communication.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-13',
+                title: 'Boston Dynamics Unveils a New Generation of Humanoid Robots',
+                date: 'October 14, 2025',
+                summary: `Boston Dynamics showcases its new line of humanoid robots, featuring improved agility and advanced AI-powered navigation. The new robots can perform complex tasks in unpredictable environments.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Boston+Robots',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">Boston Dynamics Unveils a New Generation of Humanoid Robots</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 14, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            Boston Dynamics, the company behind the famous "Spot" robot, has released a new series of humanoid robots that are faster, stronger, and more intelligent than their predecessors. The robots are designed for a variety of tasks, from warehouse logistics to search-and-rescue operations. Their ability to navigate uneven terrain and interact with their surroundings autonomously is a major leap for robotics.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-14',
+                title: 'A.I. Model Generates a Full-Length Feature Film Script',
+                date: 'October 13, 2025',
+                summary: `Researchers at a new AI lab have developed a model that wrote a complete feature-length screenplay. While the script has yet to be produced, it marks a significant step for AI in creative fields.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=AI+Script',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">A.I. Model Generates a Full-Length Feature Film Script</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 13, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            A new AI model, named "Storyweaver," has accomplished a major creative feat: writing a full-length screenplay for a science fiction film. The model, which was trained on thousands of screenplays and novels, demonstrated an impressive understanding of plot structure, character development, and dialogue. The script has been shared with several producers, and the film industry is watching with keen interest.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-15',
+                title: 'The Rise of "Eco-Tech": A New Movement in Sustainable Devices',
+                date: 'October 12, 2025',
+                summary: `A growing number of tech companies are focusing on sustainability by creating "eco-tech" products. These devices are made from recycled materials, have a minimal carbon footprint, and are designed to be easily repairable.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Eco+Tech',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">The Rise of "Eco-Tech": A New Movement in Sustainable Devices</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 12, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            The tech industry is notoriously wasteful, but a new trend is emerging: "eco-tech." Companies like Fairphone and Framework are pioneering a new approach to product design, focusing on modularity, recycled materials, and ethical sourcing. These devices are not only more sustainable but also empower consumers to fix their own gadgets, reducing electronic waste.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-16',
+                title: 'Space Tourism Takes Off: First Commercial Flight to the Moon',
+                date: 'October 11, 2025',
+                summary: `The first all-civilian crew has successfully completed a tourist trip to the moon. The flight was operated by a new space tourism company, marking a new era of private space exploration.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Space+Tourism',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">Space Tourism Takes Off: First Commercial Flight to the Moon</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 11, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            In a flight that captured the world\'s attention, a new company, "Starlight Ventures," successfully sent its first commercial space tourism mission to the moon. The four-person crew, all of whom were private citizens, spent three days orbiting the moon before safely returning to Earth. The mission, while costing millions, signals a new era for space exploration, where the final frontier is no longer limited to government agencies.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-17',
+                title: 'The Great VR Headset Face-Off: Meta vs. Apple',
+                date: 'October 10, 2025',
+                summary: `The competition in the VR headset market heats up as Meta and Apple both release new devices. This article compares the two headsets on performance, comfort, and software ecosystem.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=VR+Headset+Battle',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">The Great VR Headset Face-Off: Meta vs. Apple</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 10, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            The VR market has become a two-horse race. Meta\'s "Quest 4" and Apple\'s "Vision 2" both hit the shelves, each vying for the title of the top consumer VR headset. Meta\'s device is praised for its extensive gaming library and affordable price point, while Apple\'s is lauded for its stunning display and seamless integration with the Apple ecosystem. The choice between the two will likely come down to user preference and budget.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-18',
+                title: 'New A.I. Tool Creates Music from Brainwaves',
+                date: 'October 9, 2025',
+                summary: `A team of neuroscientists and computer engineers has developed an AI model that can translate a person\'s brainwaves into musical compositions. The technology could revolutionize music therapy and composition.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=AI+Music',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">New A.I. Tool Creates Music from Brainwaves</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 9, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            A new technology, called "NeuroHarmony," is making that a reality. The system uses an EEG cap to monitor a person\'s brainwaves and then feeds the data into a trained AI model. The model analyzes the brain patterns and generates a unique musical piece that reflects the user\'s emotions and thoughts.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-19',
+                title: 'Google\'s AI-Powered Medical Diagnosis System Shows Promising Results',
+                date: 'October 8, 2025',
+                summary: `A new AI-powered medical diagnosis system from Google is showing remarkable accuracy in detecting early signs of diseases. The system is trained on millions of medical records and scans, and its accuracy surpasses that of human doctors in certain cases.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=AI+Medical',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">Google\'s AI-Powered Medical Diagnosis System Shows Promising Results</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 8, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            Google Health has announced a major breakthrough in diagnostic medicine with its new AI system, "MedAI." The system, which is still in clinical trials, has demonstrated a higher accuracy rate than human doctors in diagnosing a range of diseases, from rare cancers to neurological disorders.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-20',
+                title: 'The Era of Smart Fabrics: Clothing That Monitors Your Health',
+                date: 'October 7, 2025',
+                summary: `New "smart fabrics" are being developed with embedded sensors that can monitor a person\'s heart rate, body temperature, and stress levels. These fabrics could have a major impact on healthcare and athletic performance.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Smart+Fabric',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">The Era of Smart Fabrics: Clothing That Monitors Your Health</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 7, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            Wearable technology is moving beyond watches and fitness trackers. Researchers are now embedding sensors directly into fabrics, creating "smart" clothing that can track a person\'s health data in real-time. These innovative textiles can monitor vital signs, detect unusual activity, and even send alerts to a doctor or family member.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-21',
+                title: 'Cybersecurity Alert: A New Type of AI-Powered Malware Emerges',
+                date: 'October 6, 2025',
+                summary: `Cybersecurity experts warn of a new form of malware that uses AI to adapt and evade detection. The "polymorphic" malware can change its code in real-time, making it incredibly difficult to defend against.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=AI+Malware',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">Cybersecurity Alert: A New Type of AI-Powered Malware Emerges</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 6, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            A new and dangerous threat has appeared in the world of cybersecurity. Experts have identified a new strain of malware that uses AI to evolve and become more resilient. The malware, dubbed "Chameleon," can learn a system\'s defenses and alter its own code to bypass them, making traditional antivirus software ineffective.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-22',
+                title: 'Robotic Surgery: A New Era of Precision and Safety',
+                date: 'October 5, 2025',
+                summary: `New advances in robotic surgery are allowing doctors to perform complex procedures with unprecedented precision. The robots are guided by surgeons but can perform delicate tasks with microscopic accuracy.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Robotic+Surgery',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">Robotic Surgery: A New Era of Precision and Safety</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 5, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            New surgical robots feature enhanced dexterity and AI-powered image recognition, allowing them to assist surgeons with unparalleled accuracy. These systems can also collect data during surgery to help improve future procedures.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-23',
+                title: 'The Metaverse Expands: New Virtual Worlds Go Live',
+                date: 'October 4, 2025',
+                summary: `Several new metaverse platforms have launched, offering immersive virtual worlds for work, play, and social interaction. These new platforms are more interoperable and accessible than their predecessors.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Metaverse+Worlds',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">The Metaverse Expands: New Virtual Worlds Go Live</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 4, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            The metaverse is no longer a single concept but a network of interconnected virtual worlds. This week, several new platforms went live, each with its unique focus, from virtual concert venues to collaborative workspaces. The new platforms are built on open standards, which means users can seamlessly move their avatars and digital assets between different virtual spaces.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-24',
+                title: 'The End of Passwords? Biometric Security Becomes the Norm',
+                date: 'October 3, 2025',
+                summary: `Password-based security is on its way out. Fingerprint, facial, and voice recognition are becoming the standard for securing devices and accounts. This shift promises to improve both security and user experience.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Biometric+Login',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">The End of Passwords? Biometric Security Becomes the Norm</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 3, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            For years, passwords have been a necessary evil, but they are increasingly being replaced by more secure and convenient biometric methods. From unlocking a phone with a fingerprint to logging into a banking app with facial recognition, biometric security is becoming the new standard. This technology is not only more secure but also eliminates the need to remember complex passwords.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-25',
+                title: 'The Great Chip Shortage Comes to an End',
+                date: 'October 2, 2025',
+                summary: `After years of supply chain disruptions, the global chip shortage is finally over. The end of the shortage means a return to normal prices for electronics and a surge in production for tech companies.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Chip+Shortage+End',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">The Great Chip Shortage Comes to an End</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 2, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            The global chip shortage, which caused headaches for tech companies and consumers alike, has finally come to an end. Improved manufacturing processes and increased investment in new fabrication plants have led to a steady recovery in the supply chain. This means that new electronics, from gaming consoles to smartphones, will be easier to find and more affordable.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-26',
+                title: 'New A.I. Model Can Translate Animal Sounds to Human Language',
+                date: 'October 1, 2025',
+                summary: `Scientists have developed an AI model that can translate animal vocalizations, such as a dog\'s bark or a cat\'s meow, into human language. The technology could have a major impact on animal welfare and our understanding of animal communication.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=AI+Animal+Translator',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">New A.I. Model Can Translate Animal Sounds to Human Language</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">October 1, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            A new and fascinating AI model, "Project Babel," can analyze animal sounds and translate their meaning. The model was trained on a massive dataset of animal vocalizations, and early tests show that it can accurately identify a dog\'s bark for "hunger," "playfulness," or "fear." While the technology is still in its infancy, it offers a glimpse into a future where we can better understand our furry friends.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-27',
+                title: 'The Rise of "Digital Twins": A New Frontier in Engineering',
+                date: 'September 30, 2025',
+                summary: `The concept of "digital twins" is gaining traction in engineering and design. These virtual replicas of physical objects can be used to simulate a product\'s performance, identify potential flaws, and optimize its design before it's even built.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Digital+Twin',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">The Rise of Digital Twins: A New Frontier in Engineering</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">September 30, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            Digital twins are virtual models of real-world objects, from an airplane engine to an entire city. These models are constantly updated with real-time data, allowing engineers to run simulations and tests without a physical prototype. The technology is revolutionizing fields like aerospace, manufacturing, and urban planning.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-28',
+                title: 'The Future of Public Transit: A New Era of Autonomous Taxis',
+                date: 'September 29, 2025',
+                summary: `Several cities are beginning to deploy autonomous taxi fleets. These self-driving cars promise to make public transportation more efficient, accessible, and affordable.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Autonomous+Taxis',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">The Future of Public Transit: A New Era of Autonomous Taxis</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">September 29, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            The era of the autonomous taxi has arrived. Companies like Waymo and Cruise are expanding their fleets, offering riders a new way to get around town. These self-driving cars are not only safer but can also be hailed on demand, eliminating the need for private vehicle ownership.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-29',
+                title: 'New "Bio-Ink" Allows for 3D Printing of Human Organs',
+                date: 'September 28, 2025',
+                summary: `Researchers have developed a new "bio-ink" that can be used to 3D print living human tissue and even simple organs. This breakthrough could revolutionize transplant medicine.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=3D+Bio-Ink',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">New "Bio-Ink" Allows for 3D Printing of Human Organs</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">September 28, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            In a development that could save countless lives, scientists have created a new "bio-ink" that can be used to 3D print complex human tissues. The ink is a mix of living cells and a special gel that allows it to maintain its shape while being printed. The technology has already been used to create a working human ear, and researchers believe that full organs, like a heart or a kidney, are the next step.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'post-30',
+                title: 'The "Cyber-Couch": The Next Step in Home Entertainment',
+                date: 'September 27, 2025',
+                summary: `A new startup has developed a "cyber-couch" that is more than just a piece of furniture. The couch features integrated haptic feedback, speakers, and a virtual reality interface, turning your living room into a fully immersive entertainment hub.`,
+                image: 'https://placehold.co/600x400/000000/FFFFFF?text=Cyber+Couch',
+                content: `
+                    <div class="prose max-w-none text-gray-800">
+                        <h2 class="text-3xl font-bold mb-4 text-gray-900">The "Cyber-Couch": The Next Step in Home Entertainment</h2>
+                        <p class="text-gray-600 mb-6">Published on <span class="font-bold">September 27, 2025</span></p>
+                        <p class="leading-relaxed mb-4">
+                            Forget home theaters. The next big thing in home entertainment is the "cyber-couch." This innovative piece of furniture is a fully integrated entertainment system. It features built-in speakers that can simulate a movie theater, haptic feedback that makes you feel the action on screen, and a VR interface that allows you to step into a new world without leaving your seat.
+                        </p>
+                    </div>
+                `
+            }
+        ];
+
+        /**
+         * Renders the content for the specified page.
+         * @param {string} pageName - The name of the page to render ('home', 'blog', 'write-rant', 'search').
+         * @param {string} [query] - The search query string (optional).
+         */
+        function renderPage(pageName, query = '') {
+            let content = '';
+            // Use a switch statement to select the content for the requested page
+            switch (pageName) {
+                case 'home':
+                    // Render a list of the latest 6 blog post previews in a grid
+                    content = `
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <h1 class="text-4xl font-bold mb-6 text-gray-900">Latest Rants</h1>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <!-- Dynamically generate blog post previews -->
+                                ${posts.slice(0, 6).map(post => `
+                                    <div class="bg-gray-200 rounded-lg shadow-inner overflow-hidden">
+                                        <!-- Post Image -->
+                                        <img src="${post.image}" alt="${post.title}" class="w-full h-48 object-cover">
+                                        <div class="p-4">
+                                            <h2 class="text-xl font-semibold text-gray-800 mb-1">${post.title}</h2>
+                                            <p class="text-gray-600 mb-2 text-sm">Published on <span class="font-bold">${post.date}</span></p>
+                                            <p class="text-gray-800 leading-snug text-sm">${post.summary}</p>
+                                            <a href="#" class="read-more text-gray-600 font-bold hover:underline transition-colors duration-200 mt-2 inline-block" data-post-id="${post.id}">Read More &rarr;</a>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <!-- See More Button -->
+                            <div class="text-center mt-8">
+                                <button onclick="renderPage('blog')" class="bg-gray-800 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-900 transition-colors duration-300 transform hover:scale-105">
+                                    See More Rants &rarr;
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'blog':
+                    // Render a list of all blog post previews in a grid
+                    content = `
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <h1 class="text-4xl font-bold mb-6 text-gray-900">All Rants</h1>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <!-- Dynamically generate all blog post previews -->
+                                ${posts.map(post => `
+                                    <div class="bg-gray-200 rounded-lg shadow-inner overflow-hidden">
+                                        <!-- Post Image -->
+                                        <img src="${post.image}" alt="${post.title}" class="w-full h-48 object-cover">
+                                        <div class="p-4">
+                                            <h2 class="text-xl font-semibold text-gray-800 mb-1">${post.title}</h2>
+                                            <p class="text-gray-600 mb-2 text-sm">Published on <span class="font-bold">${post.date}</span></p>
+                                            <p class="text-gray-800 leading-snug text-sm">${post.summary}</p>
+                                            <a href="#" class="read-more text-gray-600 font-bold hover:underline transition-colors duration-200 mt-2 inline-block" data-post-id="${post.id}">Read More &rarr;</a>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="text-center mt-8">
+                                <button onclick="renderPage('home')" class="bg-gray-800 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-900 transition-colors duration-300 transform hover:scale-105">
+                                    &larr; Back to Latest Rants
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'write-rant':
+                    // New page for writing a rant using the Gemini API
+                    content = `
+                        <div class="bg-white p-8 rounded-xl shadow-lg max-w-3xl mx-auto">
+                            <h1 class="text-4xl font-bold mb-6 text-gray-900 text-center">✨ Write a New Rant</h1>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="rant-topic" class="block text-gray-600 font-medium mb-1">Topic</label>
+                                    <input type="text" id="rant-topic" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 transition duration-200 bg-white text-gray-900" placeholder="e.g., The problem with dongles">
+                                </div>
+                                <button id="generate-rant-btn" class="w-full bg-gray-800 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-900 transition-colors duration-300 transform hover:scale-105 flex items-center justify-center">
+                                    <span id="generate-rant-text">Generate Rant</span>
+                                    <span id="generate-rant-spinner" class="spinner hidden"></span>
+                                </button>
+                            </div>
+                            <div id="generated-rant-output" class="mt-8 p-6 bg-gray-100 rounded-lg border border-gray-200 hidden">
+                                <h2 id="generated-rant-title" class="text-2xl font-semibold mb-2 text-gray-900"></h2>
+                                <p id="generated-rant-content" class="text-gray-800 leading-relaxed whitespace-pre-line"></p>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'search':
+                    // Render content based on the search query
+                    let searchResult = '';
+                    const lowerCaseQuery = searchInput.value.toLowerCase();
+                    const matchingPosts = posts.filter(post => 
+                        post.title.toLowerCase().includes(lowerCaseQuery) ||
+                        post.summary.toLowerCase().includes(lowerCaseQuery) ||
+                        post.content.toLowerCase().includes(lowerCaseQuery)
+                    );
+
+                    if (matchingPosts.length > 0) {
+                        const resultsHtml = matchingPosts.map(post => `
+                            <div class="bg-gray-200 rounded-lg shadow-inner overflow-hidden">
+                                <!-- Post Image -->
+                                <img src="${post.image}" alt="${post.title}" class="w-full h-48 object-cover">
+                                <div class="p-4">
+                                    <h2 class="text-xl font-semibold text-gray-800 mb-1">${post.title}</h2>
+                                    <p class="text-gray-600 mb-2 text-sm">Published on <span class="font-bold">${post.date}</span></p>
+                                    <p class="text-gray-800 leading-snug text-sm">${post.summary}</p>
+                                    <a href="#" class="read-more text-gray-600 font-bold hover:underline transition-colors duration-200 mt-2 inline-block" data-post-id="${post.id}">Read More &rarr;</a>
+                                </div>
+                            </div>
+                        `).join('');
+                        searchResult = `
+                            <div class="space-y-6">
+                                <p class="text-gray-800 text-xl font-medium">Found ${matchingPosts.length} result(s) for "${query}".</p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    ${resultsHtml}
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        searchResult = `<p class="text-gray-800 text-xl">No results found for "${query}". Try searching for "AI", "Javascript", or "Tech".</p>`;
+                    }
+                    content = `
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <h1 class="text-4xl font-bold mb-6 text-gray-900">Search Results</h1>
+                            ${searchResult}
+                        </div>
+                    `;
+                    break;
+                default:
+                    // Fallback to home page if an invalid page name is provided
+                    content = `
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <h1 class="text-4xl font-bold mb-4 text-gray-900">Page Not Found</h1>
+                            <p class="text-gray-800 leading-relaxed">
+                                The page you are looking for does not exist.
+                            </p>
+                        </div>
+                    `;
+                    break;
+            }
+
+            // Update the main content area with the new HTML
+            mainContent.innerHTML = content;
+            // Add event listeners for the new "Read More" links
+            document.querySelectorAll('.read-more').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const postId = e.target.getAttribute('data-post-id');
+                    renderPost(postId);
+                });
+            });
+
+            // If on the 'write-rant' page, attach the new event listener
+            if (pageName === 'write-rant') {
+                document.getElementById('generate-rant-btn').addEventListener('click', generateRant);
+            }
+        }
+
+        // A new function to render a specific blog post
+        function renderPost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                const content = `
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        ${post.content}
+                        <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mt-8">
+                            <button id="summarize-btn" class="flex-1 bg-gray-800 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-900 transition-colors duration-300 transform hover:scale-105 flex items-center justify-center">
+                                <span id="summarize-btn-text">✨ Summarize this Post</span>
+                                <span id="summarize-btn-spinner" class="spinner hidden"></span>
+                            </button>
+                            <button id="listen-btn" class="flex-1 bg-gray-800 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-900 transition-colors duration-300 transform hover:scale-105 flex items-center justify-center">
+                                <span id="listen-btn-text">🔊 Listen to Post</span>
+                                <span id="listen-btn-spinner" class="spinner hidden"></span>
+                            </button>
+                        </div>
+                        <div id="summary-output" class="mt-8 p-6 bg-gray-100 rounded-lg border border-gray-200 hidden">
+                            <h3 class="text-xl font-semibold mb-2 text-gray-900">Summary</h3>
+                            <p id="summary-text" class="text-gray-800 leading-relaxed"></p>
+                        </div>
+                        <audio id="post-audio" class="mt-8 hidden w-full" controls></audio>
+                        <button onclick="renderPage('blog')" class="mt-8 bg-gray-800 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-900 transition-colors duration-300 transform hover:scale-105">
+                            &larr; Back to all posts
+                        </button>
+                    </div>
+                `;
+                mainContent.innerHTML = content;
+
+                // Attach event listeners for the new AI features
+                document.getElementById('summarize-btn').addEventListener('click', () => summarizePost(post.content));
+                document.getElementById('listen-btn').addEventListener('click', () => textToSpeech(post.content));
+            } else {
+                renderPage('home');
+            }
+        }
+
+        // --- GEMINI API INTEGRATIONS ---
+
+        /**
+         * Converts base64 PCM data to a WAV file Blob.
+         * @param {string} base64Data - The base64-encoded PCM audio data.
+         * @param {number} sampleRate - The sample rate of the audio (e.g., 24000).
+         * @returns {Blob} The audio data as a WAV Blob.
+         */
+        function pcmToWav(base64Data, sampleRate) {
+            const pcmData = base64ToArrayBuffer(base64Data);
+            const pcm16 = new Int16Array(pcmData);
+            const numChannels = 1;
+            const bytesPerSample = 2;
+            const blockAlign = numChannels * bytesPerSample;
+            const byteRate = sampleRate * blockAlign;
+
+            const buffer = new ArrayBuffer(44 + pcm16.length * bytesPerSample);
+            const view = new DataView(buffer);
+
+            // RIFF header
+            view.setUint32(0, 0x52494646, true); // "RIFF"
+            view.setUint32(4, 36 + pcm16.byteLength, true); // file size
+            view.setUint32(8, 0x57415645, true); // "WAVE"
+
+            // fmt chunk
+            view.setUint32(12, 0x666d7420, true); // "fmt "
+            view.setUint32(16, 16, true); // chunk size
+            view.setUint16(20, 1, true); // audio format (1 = PCM)
+            view.setUint16(22, numChannels, true); // number of channels
+            view.setUint32(24, sampleRate, true); // sample rate
+            view.setUint32(28, byteRate, true); // byte rate
+            view.setUint16(32, blockAlign, true); // block align
+            view.setUint16(34, 16, true); // bits per sample
+
+            // data chunk
+            view.setUint32(36, 0x64617461, true); // "data"
+            view.setUint32(40, pcm16.byteLength, true); // data size
+
+            // Write PCM data
+            for (let i = 0; i < pcm16.length; i++) {
+                view.setInt16(44 + i * bytesPerSample, pcm16[i], true);
+            }
+
+            return new Blob([view], { type: 'audio/wav' });
+        }
+
+        /**
+         * Converts a base64 string to an ArrayBuffer.
+         * @param {string} base64 - The base64 string.
+         * @returns {ArrayBuffer} The converted ArrayBuffer.
+         */
+        function base64ToArrayBuffer(base64) {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+        
+        /**
+         * Handles the Text-to-Speech API call and plays the audio.
+         * @param {string} textContent - The content to convert to speech.
+         */
+        async function textToSpeech(textContent) {
+            const listenBtn = document.getElementById('listen-btn');
+            const listenBtnText = document.getElementById('listen-btn-text');
+            const listenBtnSpinner = document.getElementById('listen-btn-spinner');
+            const postAudio = document.getElementById('post-audio');
+            
+            // Show loading state
+            listenBtn.disabled = true;
+            listenBtnText.classList.add('hidden');
+            listenBtnSpinner.classList.remove('hidden');
+            postAudio.classList.add('hidden');
+
+            try {
+                const prompt = `Say in a smooth, informative tone: ${textContent}`;
+                const payload = {
+                    contents: [{
+                        parts: [{ text: prompt }]
+                    }],
+                    generationConfig: {
+                        responseModalities: ["AUDIO"],
+                        speechConfig: {
+                            voiceConfig: {
+                                prebuiltVoiceConfig: { voiceName: "Algieba" }
+                            }
+                        }
+                    },
+                    model: "gemini-2.5-flash-preview-tts"
+                };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+                const audioData = part?.inlineData?.data;
+                const mimeType = part?.inlineData?.mimeType;
+
+                if (audioData && mimeType && mimeType.startsWith("audio/")) {
+                    const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+                    const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
+                    const wavBlob = pcmToWav(audioData, sampleRate);
+                    const audioUrl = URL.createObjectURL(wavBlob);
+                    postAudio.src = audioUrl;
+                    postAudio.classList.remove('hidden');
+                    postAudio.play();
+                } else {
+                    throw new Error("Invalid audio response format");
+                }
+            } catch (error) {
+                console.error("Text-to-speech failed:", error);
+                // Display error message to the user
+                const errorMessage = "Failed to generate speech. Please try again.";
+                const audioBlob = new Blob([errorMessage], { type: 'text/plain' });
+                const errorUrl = URL.createObjectURL(audioBlob);
+                postAudio.src = errorUrl;
+                postAudio.classList.remove('hidden');
+                
+            } finally {
+                // Hide loading state
+                listenBtn.disabled = false;
+                listenBtnText.classList.remove('hidden');
+                listenBtnSpinner.classList.add('hidden');
+            }
+        }
+        
+        /**
+         * Summarizes a given text using the Gemini API.
+         * @param {string} textContent - The content to summarize.
+         */
+        async function summarizePost(textContent) {
+            const summarizeBtn = document.getElementById('summarize-btn');
+            const summarizeBtnText = document.getElementById('summarize-btn-text');
+            const summarizeBtnSpinner = document.getElementById('summarize-btn-spinner');
+            const summaryOutput = document.getElementById('summary-output');
+            const summaryText = document.getElementById('summary-text');
+            
+            // Show loading state
+            summarizeBtn.disabled = true;
+            summarizeBtnText.classList.add('hidden');
+            summarizeBtnSpinner.classList.remove('hidden');
+            summaryOutput.classList.add('hidden');
+
+            try {
+                const prompt = `Summarize the following tech rant in a concise, and engaging paragraph:\n\n${textContent}`;
+                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                
+                const summary = result.candidates[0].content.parts[0].text;
+                summaryText.textContent = summary;
+                summaryOutput.classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Summarization failed:", error);
+                summaryText.textContent = "Failed to generate summary. Please try again.";
+                summaryOutput.classList.remove('hidden');
+            } finally {
+                // Hide loading state
+                summarizeBtn.disabled = false;
+                summarizeBtnText.classList.remove('hidden');
+                summarizeBtnSpinner.classList.add('hidden');
+            }
+        }
+        
+        /**
+         * Generates a new rant based on a user's topic using the Gemini API.
+         */
+        async function generateRant() {
+            const rantTopicInput = document.getElementById('rant-topic');
+            const generateRantBtn = document.getElementById('generate-rant-btn');
+            const generateRantText = document.getElementById('generate-rant-text');
+            const generateRantSpinner = document.getElementById('generate-rant-spinner');
+            const generatedRantOutput = document.getElementById('generated-rant-output');
+            const generatedRantTitle = document.getElementById('generated-rant-title');
+            const generatedRantContent = document.getElementById('generated-rant-content');
+
+            const topic = rantTopicInput.value;
+            if (!topic) {
+                generatedRantOutput.classList.remove('hidden');
+                generatedRantTitle.textContent = "Please enter a topic.";
+                generatedRantContent.textContent = "";
+                return;
+            }
+
+            // Show loading state
+            generateRantBtn.disabled = true;
+            generateRantText.classList.add('hidden');
+            generateRantSpinner.classList.remove('hidden');
+            generatedRantOutput.classList.add('hidden');
+
+            try {
+                const prompt = `Write a tech rant about the following topic in the style of a blog post with a title. The tone should be slightly annoyed and informal. The content should be at least two paragraphs. Topic: ${topic}`;
+                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                
+                const generatedText = result.candidates[0].content.parts[0].text;
+                const lines = generatedText.split('\n');
+                const title = lines[0].replace(/^(Title|title):?\s*/, '').trim();
+                const content = lines.slice(1).join('\n').trim();
+
+                generatedRantTitle.textContent = title || 'Untitled Rant';
+                generatedRantContent.textContent = content;
+                generatedRantOutput.classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Rant generation failed:", error);
+                generatedRantTitle.textContent = "Failed to generate rant. Please try again.";
+                generatedRantContent.textContent = "";
+                generatedRantOutput.classList.remove('hidden');
+            } finally {
+                // Hide loading state
+                generateRantBtn.disabled = false;
+                generateRantText.classList.remove('hidden');
+                generateRantSpinner.classList.add('hidden');
+            }
+        }
+        
+        // Add event listeners to each navigation link
+        homeLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            renderPage('home');
+        });
+
+        blogLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            renderPage('blog');
+        });
+
+        writeRantLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            renderPage('write-rant');
+        });
+
+        // Add event listener for the search button
+        searchButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const query = searchInput.value;
+            renderPage('search', query);
+        });
+        
+        // Listen for "Enter" key press on the search input
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchButton.click();
+            }
+        });
+
+        // Render the home page on initial load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPage('home');
+        });
+    </script>
+</body>
+</html>
